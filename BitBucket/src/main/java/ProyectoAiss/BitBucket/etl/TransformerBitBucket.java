@@ -7,19 +7,24 @@ import ProyectoAiss.BitBucket.model.BitBucket.CommitData.BCCommitData;
 import ProyectoAiss.BitBucket.model.BitBucket.BUser;
 import ProyectoAiss.BitBucket.model.BitBucket.IssueData.BIComments;
 import ProyectoAiss.BitBucket.model.BitBucket.IssueData.BIssueData;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.List;
 
+@Component
 public class TransformerBitBucket {
     public BCommit transformCommit(BCCommitData bitBucketCommit) {
         BCommit commit = new BCommit();
 
         commit.setId(bitBucketCommit.hash);
-        commit.setTitle("");
+        commit.setTitle(bitBucketCommit.message.split("\n")[0]);
         commit.setMessage(bitBucketCommit.message);
         commit.setAuthoredDate(bitBucketCommit.date);
         commit.setAuthorName(bitBucketCommit.author.user.displayName);
-        commit.setAuthorEmail("");
+        String raw = bitBucketCommit.author.raw;
+        String email = raw != null && raw.contains("<") ? raw.substring(raw.indexOf("<") + 1, raw.indexOf(">")) : "";
+        commit.setAuthorEmail(email);
         commit.setWebUrl(bitBucketCommit.links.BCHtml.href);
 
         return commit;
@@ -46,10 +51,9 @@ public class TransformerBitBucket {
     public BIssue transformIssue(BIssueData bitBucketIssueData) {
         BIssue issue = new BIssue();
         BUser user = new BUser();
-        BComment comments = transformComment(null);
         user.setAvatarUrl(bitBucketIssueData.reporter.avatar.href);
         user.setName(bitBucketIssueData.reporter.displayName);
-        user.setId(bitBucketIssueData.reporter.uuid);
+        user.setId(bitBucketIssueData.id.toString());
         user.setWebUrl(bitBucketIssueData.reporter.BCLinks.BCHtml.href);
         user.setUsername(bitBucketIssueData.reporter.nickname);
 
@@ -57,12 +61,12 @@ public class TransformerBitBucket {
         issue.setTitle(bitBucketIssueData.title);
         issue.setDescription(bitBucketIssueData.content.raw);
         issue.setState(bitBucketIssueData.state);
-        issue.setCreatedAt(bitBucketIssueData.createdOn.toString());
-        issue.setUpdatedAt(bitBucketIssueData.updatedOn.toString());
+        issue.setCreatedAt(bitBucketIssueData.createdOn);
+        issue.setUpdatedAt(bitBucketIssueData.updatedOn);
         issue.setLabels(new ArrayList<>());
         issue.setAuthor(user);
         issue.setAssignee(null);
-        issue.setComments(comments);
+        issue.setComments(List.of());
 
 
         return issue;
