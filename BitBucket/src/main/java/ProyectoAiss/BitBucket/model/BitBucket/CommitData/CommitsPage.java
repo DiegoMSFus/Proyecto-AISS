@@ -13,7 +13,5 @@ public class CommitsPage {
     @JsonProperty("values")
     public List<BCCommitData> values;
 
-    @JsonProperty("next")
-    public String next;
 }
 

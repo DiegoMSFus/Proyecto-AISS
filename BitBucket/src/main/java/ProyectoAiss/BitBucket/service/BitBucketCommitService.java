@@ -14,11 +14,12 @@ import java.util.List;
 @Service
 public class BitBucketCommitService {
 
-    private final RestTemplate restTemplate;
+    @Autowired
+    RestTemplate restTemplate;
+
     private final TransformerBitBucket transformer;
 
-    public BitBucketCommitService(RestTemplate restTemplate, TransformerBitBucket transformer) {
-        this.restTemplate = restTemplate;
+    public BitBucketCommitService(TransformerBitBucket transformer) {
         this.transformer = transformer;
     }
 
@@ -36,11 +37,14 @@ public class BitBucketCommitService {
                     commits.add(transformer.transformCommit(rawCommit));
                 }
 
-                if (response.next == null) break;
+                if (response.values.size() < nCommits) {
+                    break;
+                }
             } else {
                 break;
             }
         }
+
         return commits;
     }
 }

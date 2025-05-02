@@ -10,6 +10,4 @@ public class IssuesPage {
     @JsonProperty("values")
     public List<BIssueData> values;
 
-    @JsonProperty("next")
-    public String next;
 }

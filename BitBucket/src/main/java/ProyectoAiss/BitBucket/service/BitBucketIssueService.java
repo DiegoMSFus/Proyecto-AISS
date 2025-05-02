@@ -5,6 +5,7 @@ import ProyectoAiss.BitBucket.model.BitBucket.BIssue;
 import ProyectoAiss.BitBucket.model.BitBucket.BComment;
 import ProyectoAiss.BitBucket.model.BitBucket.IssueData.BIssueData;
 import ProyectoAiss.BitBucket.model.BitBucket.IssueData.IssuesPage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -14,14 +15,13 @@ import java.util.List;
 @Service
 public class BitBucketIssueService {
 
-    private final RestTemplate restTemplate;
+    @Autowired
+    RestTemplate restTemplate;
     private final TransformerBitBucket transformer;
     private final BitBucketCommentService commentService;
 
-    public BitBucketIssueService(RestTemplate restTemplate,
-                                 TransformerBitBucket transformer,
+    public BitBucketIssueService(TransformerBitBucket transformer,
                                  BitBucketCommentService commentService) {
-        this.restTemplate = restTemplate;
         this.transformer = transformer;
         this.commentService = commentService;
     }
@@ -30,8 +30,8 @@ public class BitBucketIssueService {
         List<BIssue> issues = new ArrayList<>();
 
         for (int page = 1; page <= maxPages; page++) {
-            String url = "https://api.bitbucket.org/2.0/repositories/" + workspace + "/" + repoSlug +
-                    "/issues?pagelen=" + nIssues + "&page=" + page;
+            String url = "https://api.bitbucket.org/2.0/repositories/" + workspace + "/" + repoSlug
+                    + "/issues?pagelen=" + nIssues + "&page=" + page;
 
             IssuesPage response = restTemplate.getForObject(url, IssuesPage.class);
 
@@ -42,7 +42,6 @@ public class BitBucketIssueService {
                     if (rawIssue.links != null &&
                             rawIssue.links.comments != null &&
                             rawIssue.links.comments.href != null) {
-
                         comments = commentService.fetchComments(rawIssue.links.comments.href, maxPages);
                     }
 
@@ -50,8 +49,9 @@ public class BitBucketIssueService {
                     issues.add(issue);
                 }
 
-                if (response.next == null) break;
-
+                if (response.values.size() < nIssues) {
+                    break;
+                }
             } else {
                 break;
             }
@@ -59,4 +59,5 @@ public class BitBucketIssueService {
 
         return issues;
     }
+
 }

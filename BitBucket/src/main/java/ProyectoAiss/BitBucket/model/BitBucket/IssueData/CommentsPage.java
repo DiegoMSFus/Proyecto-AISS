@@ -10,6 +10,4 @@ public class CommentsPage {
     @JsonProperty("values")
     public List<BIComments> values;
 
-    @JsonProperty("next")
-    public String next;
 }
