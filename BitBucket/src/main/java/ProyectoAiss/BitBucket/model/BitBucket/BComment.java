@@ -3,7 +3,6 @@ package ProyectoAiss.BitBucket.model.BitBucket;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import org.springframework.data.annotation.Id;
 
 import jakarta.validation.constraints.NotEmpty;
 

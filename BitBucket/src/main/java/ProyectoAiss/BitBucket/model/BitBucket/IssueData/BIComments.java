@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "created_on",
     "updated_on",
     "BIContent",
-    "BCUser",
+    "BIUser",
     "issue",
     "BILinks"
 })
@@ -32,12 +32,12 @@ public class BIComments {
     public Object updatedOn;
     @JsonProperty("BIContent")
     public BIContent BIContent;
-    @JsonProperty("BCUser")
+    @JsonProperty("BIUser")
     public BIUser user;
     @JsonProperty("issue")
     public BIssueData issue;
     @JsonProperty("BILinks")
-    public BCLinks BCLinks;
+    public BILinks BILinks;
 
     @Override
     public String toString() {
@@ -63,7 +63,7 @@ public class BIComments {
         sb.append('=');
         sb.append(((this.BIContent == null)?"<null>":this.BIContent));
         sb.append(',');
-        sb.append("BCUser");
+        sb.append("BIUser");
         sb.append('=');
         sb.append(((this.user == null)?"<null>":this.user));
         sb.append(',');
@@ -73,7 +73,7 @@ public class BIComments {
         sb.append(',');
         sb.append("BILinks");
         sb.append('=');
-        sb.append(((this.BCLinks == null)?"<null>":this.BCLinks));
+        sb.append(((this.BILinks == null)?"<null>":this.BILinks));
         sb.append(',');
         if (sb.charAt((sb.length()- 1)) == ',') {
             sb.setCharAt((sb.length()- 1), ']');

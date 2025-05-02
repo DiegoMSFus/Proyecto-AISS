@@ -14,8 +14,8 @@ import java.util.List;
 @Service
 public class BitBucketCommitService {
 
-    private RestTemplate restTemplate;
-    private TransformerBitBucket transformer;
+    private final RestTemplate restTemplate;
+    private final TransformerBitBucket transformer;
 
     public BitBucketCommitService(RestTemplate restTemplate, TransformerBitBucket transformer) {
         this.restTemplate = restTemplate;

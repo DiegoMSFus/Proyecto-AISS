@@ -24,19 +24,19 @@ public class BProject {
     @JsonProperty("web_url")
     @NotEmpty(message = "The URL of the project cannot be empty")
     public String webUrl;
-    @JsonProperty("BCommits")
+    @JsonProperty("commits")
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "projectId")
-    private List<BCommit> BCommits;
+    private List<BCommit> commits;
 
-    @JsonProperty("BIssues")
+    @JsonProperty("issues")
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "projectId")
-    private List<BIssue> BIssues;
+    private List<BIssue> issues;
 
     public BProject() {
-        BCommits = new ArrayList<>();
-        BIssues = new ArrayList<>();
+        commits = new ArrayList<>();
+        issues = new ArrayList<>();
     }
 
     public String getId() {
@@ -64,19 +64,15 @@ public class BProject {
     }
 
     public List<BCommit> getCommits() {
-        return BCommits;
+        return commits;
     }
 
-    public void setCommits(List<BCommit> BCommits) {
-        this.BCommits = BCommits;
-    }
+    public void setCommits(List<BCommit> BCommits) {this.commits = BCommits;}
 
-    public List<BIssue> getIssues() {
-        return BIssues;
-    }
+    public List<BIssue> getIssues() { return issues; }
 
     public void setIssues(List<BIssue> BIssues) {
-        this.BIssues = BIssues;
+        this.issues = BIssues;
     }
 
     @Override
@@ -87,13 +83,13 @@ public class BProject {
         sb.append('=');
         sb.append(((this.id == null)?"<null>":this.id));
         sb.append(',');
-        sb.append("BCommits");
+        sb.append("commits");
         sb.append('=');
-        sb.append(((this.BCommits == null)?"<null>":this.BCommits));
+        sb.append(((this.commits == null)?"<null>":this.commits));
         sb.append(',');
-        sb.append("BIssues");
+        sb.append("issues");
         sb.append('=');
-        sb.append(((this.BIssues == null)?"<null>":this.BIssues));
+        sb.append(((this.issues == null)?"<null>":this.issues));
         sb.append(',');
 
         if (sb.charAt((sb.length()- 1)) == ',') {

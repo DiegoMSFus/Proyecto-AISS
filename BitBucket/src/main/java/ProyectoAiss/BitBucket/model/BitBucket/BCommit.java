@@ -1,5 +1,6 @@
 package ProyectoAiss.BitBucket.model.BitBucket;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
@@ -34,6 +35,15 @@ public class BCommit {
     @NotEmpty(message = "URL cannot be empty." +
             "")
     private String webUrl;
+
+    @JsonIgnore
+    private String repositoryId;
+
+    @JsonIgnore
+    private String repositoryName;
+
+    @JsonIgnore
+    private String repositoryUrl;
 
     public String getId() {
         return id;
@@ -90,6 +100,26 @@ public class BCommit {
     public void setWebUrl(String webUrl) {
         this.webUrl = webUrl;
     }
+
+    public String getRepositoryId() {
+        return repositoryId;
+    }
+    public void setRepositoryId(String repositoryId) {
+        this.repositoryId = repositoryId;
+    }
+    public String getRepositoryName() {
+        return repositoryName;
+    }
+    public void setRepositoryName(String repositoryName) {
+        this.repositoryName = repositoryName;
+    }
+    public String getRepositoryUrl() {
+        return repositoryUrl;
+    }
+    public void setRepositoryUrl(String repositoryUrl) {
+        this.repositoryUrl = repositoryUrl;
+    }
+
 
     @Override
     public String toString() {

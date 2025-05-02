@@ -40,7 +40,7 @@ public class BIssueData {
     @JsonProperty("repository")
     public BIRepository repository;
     @JsonProperty("links")
-    public BCLinks links;
+    public BILinks links;
     @JsonProperty("title")
     public String title;
     @JsonProperty("content")

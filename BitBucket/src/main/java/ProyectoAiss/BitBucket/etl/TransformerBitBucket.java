@@ -26,49 +26,104 @@ public class TransformerBitBucket {
         String email = raw != null && raw.contains("<") ? raw.substring(raw.indexOf("<") + 1, raw.indexOf(">")) : "";
         commit.setAuthorEmail(email);
         commit.setWebUrl(bitBucketCommit.links.BCHtml.href);
+        if (bitBucketCommit.repository != null) {
+            commit.setRepositoryId(bitBucketCommit.repository.uuid);
+            commit.setRepositoryName(bitBucketCommit.repository.name);
+
+            if (bitBucketCommit.repository.BCLinks != null &&
+                    bitBucketCommit.repository.BCLinks.BCHtml != null) {
+                commit.setRepositoryUrl(bitBucketCommit.repository.BCLinks.BCHtml.href);
+            } else {
+                commit.setRepositoryUrl(null);
+            }
+        }
+
 
         return commit;
     }
 
     public BComment transformComment(BIComments bitBucketIssueComment) {
-        BUser user = new BUser();
-        user.setAvatarUrl(bitBucketIssueComment.user.avatar.href);
-        user.setName(bitBucketIssueComment.user.displayName);
-        user.setId(bitBucketIssueComment.user.uuid);
-        user.setWebUrl(bitBucketIssueComment.user.BCLinks.BCHtml.href);
-        user.setUsername(bitBucketIssueComment.user.nickname);
-        BComment comment = new BComment();
+        BUser user = null;
 
+        if (bitBucketIssueComment.user != null) {
+            user = new BUser();
+            user.setId(bitBucketIssueComment.user.uuid);
+            user.setUsername(bitBucketIssueComment.user.nickname);
+            user.setName(bitBucketIssueComment.user.displayName);
+
+            if (bitBucketIssueComment.user.BILinks != null) {
+                if (bitBucketIssueComment.user.BILinks.comments != null) {
+                    user.setAvatarUrl(bitBucketIssueComment.user.BILinks.avatar.href);
+                }
+                if (bitBucketIssueComment.user.BILinks.html != null) {
+                    user.setWebUrl(bitBucketIssueComment.user.BILinks.html.href);
+                }
+            }
+        }
+
+        BComment comment = new BComment();
         comment.setId(bitBucketIssueComment.id.toString());
         comment.setAuthor(user);
-        comment.setBody(bitBucketIssueComment.BIContent.raw);
+
+        if (bitBucketIssueComment.BIContent != null && bitBucketIssueComment.BIContent.raw != null) {
+            comment.setBody(bitBucketIssueComment.BIContent.raw);
+        } else {
+            comment.setBody("(no content)");
+        }
+
         comment.setCreatedAt(bitBucketIssueComment.createdOn);
-        comment.setUpdatedAt(bitBucketIssueComment.updatedOn.toString());
+
+        if (bitBucketIssueComment.updatedOn != null) {
+            comment.setUpdatedAt(bitBucketIssueComment.updatedOn.toString());
+        }
 
         return comment;
     }
 
-    public BIssue transformIssue(BIssueData bitBucketIssueData) {
+
+    public BIssue transformIssue(BIssueData issueData, List<BComment> comments) {
         BIssue issue = new BIssue();
-        BUser user = new BUser();
-        user.setAvatarUrl(bitBucketIssueData.reporter.avatar.href);
-        user.setName(bitBucketIssueData.reporter.displayName);
-        user.setId(bitBucketIssueData.id.toString());
-        user.setWebUrl(bitBucketIssueData.reporter.BCLinks.BCHtml.href);
-        user.setUsername(bitBucketIssueData.reporter.nickname);
 
-        issue.setId(bitBucketIssueData.reporter.uuid.toString());
-        issue.setTitle(bitBucketIssueData.title);
-        issue.setDescription(bitBucketIssueData.content.raw);
-        issue.setState(bitBucketIssueData.state);
-        issue.setCreatedAt(bitBucketIssueData.createdOn);
-        issue.setUpdatedAt(bitBucketIssueData.updatedOn);
-        issue.setLabels(new ArrayList<>());
-        issue.setAuthor(user);
+        issue.setId(issueData.id != null ? issueData.id.toString() : null);
+
+        if (issueData.content != null && issueData.content.raw != null) {
+            String[] lines = issueData.content.raw.split("\n", 2);
+            issue.setTitle(lines[0]);
+            issue.setDescription(lines.length > 1 ? lines[1] : lines[0]);
+        } else {
+            issue.setTitle("(no content)");
+            issue.setDescription("");
+        }
+
+        // Estado
+        issue.setState(issueData.state);
+        issue.setCreatedAt(issueData.createdOn);
+        issue.setUpdatedAt(issueData.updatedOn);
+        issue.setClosedAt("closed".equalsIgnoreCase(issueData.state) ? issueData.updatedOn : null);
+
+        if (issueData.reporter != null) {
+            BUser author = new BUser();
+            author.setId(issueData.reporter.uuid);
+            author.setUsername(issueData.reporter.nickname);
+            author.setName(issueData.reporter.displayName);
+
+            if (issueData.reporter.BILinks != null) {
+                if (issueData.reporter.BILinks.avatar != null)
+                    author.setAvatarUrl(issueData.reporter.BILinks.avatar.href);
+                if (issueData.reporter.BILinks.html != null)
+                    author.setWebUrl(issueData.reporter.BILinks.html.href);
+            }
+
+            issue.setAuthor(author);
+        } else {
+            issue.setAuthor(null);
+        }
+
         issue.setAssignee(null);
-        issue.setComments(List.of());
-
+        issue.setLabels(new ArrayList<>());
+        issue.setComments(comments);
 
         return issue;
     }
+
 }

@@ -34,8 +34,7 @@ public class BIssue {
     @JsonProperty("labels")
     @ElementCollection
     private List<String> labels;
-    @JsonProperty("BCAuthor")
-    //@NotEmpty(message = "The BCAuthor of the issue cannot be empty")
+    @JsonProperty("author")
     @JoinColumn(name = "author_id",referencedColumnName = "id")
     @OneToOne(cascade=CascadeType.ALL)
     private BUser author;
@@ -51,10 +50,10 @@ public class BIssue {
     @JsonProperty("web_url")
     private String webUrl;
 
-    @JsonProperty("BComments")
+    @JsonProperty("comments")
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "issueId")
-    private List<BComment> BComments;
+    private List<BComment> comments;
 
     public String getId() {
         return id;
@@ -169,11 +168,11 @@ public class BIssue {
     }
 
     public List<BComment> getComments() {
-        return BComments;
+        return comments;
     }
 
     public void setComments(List<BComment> BComments) {
-        this.BComments = BComments;
+        this.comments = BComments;
     }
 
     @Override
@@ -216,7 +215,7 @@ public class BIssue {
         sb.append('=');
         sb.append(((this.labels == null) ? "<null>" : this.labels));
         sb.append(',');
-        sb.append("BCAuthor");
+        sb.append("author");
         sb.append('=');
         sb.append(((this.author == null) ? "<null>" : this.author));
         sb.append(',');
@@ -232,9 +231,9 @@ public class BIssue {
         sb.append('=');
         sb.append(((this.downvotes == null) ? "<null>" : this.downvotes));
         sb.append(',');
-        sb.append("BComments");
+        sb.append("comments");
         sb.append('=');
-        sb.append(((this.BComments == null) ? "<null>" : this.BComments));
+        sb.append(((this.comments == null) ? "<null>" : this.comments));
         sb.append(',');
 
         if (sb.charAt((sb.length() - 1)) == ',') {
