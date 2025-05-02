@@ -27,7 +27,7 @@ public class BCRepository {
     @JsonProperty("uuid")
     public String uuid;
     @JsonProperty("BILinks")
-    public BCLinks BCLinks;
+    public BCLinks links;
 
     @Override
     public String toString() {
@@ -43,7 +43,7 @@ public class BCRepository {
         sb.append(',');
         sb.append("BILinks");
         sb.append('=');
-        sb.append(((this.BCLinks == null)?"<null>":this.BCLinks));
+        sb.append(((this.links == null)?"<null>":this.links));
         sb.append(',');
         sb.append("name");
         sb.append('=');

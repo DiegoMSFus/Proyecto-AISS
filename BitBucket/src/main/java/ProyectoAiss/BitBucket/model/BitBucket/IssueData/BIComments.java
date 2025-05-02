@@ -30,14 +30,14 @@ public class BIComments {
     public String createdOn;
     @JsonProperty("updated_on")
     public Object updatedOn;
-    @JsonProperty("BIContent")
-    public BIContent BIContent;
-    @JsonProperty("BIUser")
+    @JsonProperty("content")
+    public BIContent content;
+    @JsonProperty("user")
     public BIUser user;
     @JsonProperty("issue")
     public BIssueData issue;
-    @JsonProperty("BILinks")
-    public BILinks BILinks;
+    @JsonProperty("links")
+    public BILinks links;
 
     @Override
     public String toString() {
@@ -59,11 +59,11 @@ public class BIComments {
         sb.append('=');
         sb.append(((this.updatedOn == null)?"<null>":this.updatedOn));
         sb.append(',');
-        sb.append("BIContent");
+        sb.append("content");
         sb.append('=');
-        sb.append(((this.BIContent == null)?"<null>":this.BIContent));
+        sb.append(((this.content == null)?"<null>":this.content));
         sb.append(',');
-        sb.append("BIUser");
+        sb.append("user");
         sb.append('=');
         sb.append(((this.user == null)?"<null>":this.user));
         sb.append(',');
@@ -71,9 +71,9 @@ public class BIComments {
         sb.append('=');
         sb.append(((this.issue == null)?"<null>":this.issue));
         sb.append(',');
-        sb.append("BILinks");
+        sb.append("links");
         sb.append('=');
-        sb.append(((this.BILinks == null)?"<null>":this.BILinks));
+        sb.append(((this.links == null)?"<null>":this.links));
         sb.append(',');
         if (sb.charAt((sb.length()- 1)) == ',') {
             sb.setCharAt((sb.length()- 1), ']');

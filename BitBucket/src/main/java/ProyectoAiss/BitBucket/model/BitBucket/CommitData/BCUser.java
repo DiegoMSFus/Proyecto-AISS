@@ -22,7 +22,7 @@ public class BCUser {
     @JsonProperty("display_name")
     public String displayName;
     @JsonProperty("BILinks")
-    public BCLinks BCLinks;
+    public BCLinks links;
     @JsonProperty("type")
     public String type;
     @JsonProperty("uuid")
@@ -42,7 +42,7 @@ public class BCUser {
         sb.append(',');
         sb.append("BILinks");
         sb.append('=');
-        sb.append(((this.BCLinks == null)?"<null>":this.BCLinks));
+        sb.append(((this.links == null)?"<null>":this.links));
         sb.append(',');
         sb.append("type");
         sb.append('=');

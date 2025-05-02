@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public class BCLinks {
 
     @JsonProperty("html")
-    public BCHtml BCHtml;
+    public BCHtml html;
 
     @Override
     public String toString() {
@@ -25,7 +25,7 @@ public class BCLinks {
         sb.append(BCLinks.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
         sb.append("html");
         sb.append('=');
-        sb.append(((this.BCHtml == null)?"<null>":this.BCHtml));
+        sb.append(((this.html == null)?"<null>":this.html));
         sb.append(',');
         if (sb.charAt((sb.length()- 1)) == ',') {
             sb.setCharAt((sb.length()- 1), ']');

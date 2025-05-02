@@ -23,7 +23,7 @@ public class BIRepository {
     @JsonProperty("full_name")
     public String fullName;
     @JsonProperty("BILinks")
-    public BILinks BILinks;
+    public BILinks links;
     @JsonProperty("name")
     public String name;
     @JsonProperty("uuid")
@@ -43,7 +43,7 @@ public class BIRepository {
         sb.append(',');
         sb.append("BILinks");
         sb.append('=');
-        sb.append(((this.BILinks == null)?"<null>":this.BILinks));
+        sb.append(((this.links == null)?"<null>":this.links));
         sb.append(',');
         sb.append("name");
         sb.append('=');

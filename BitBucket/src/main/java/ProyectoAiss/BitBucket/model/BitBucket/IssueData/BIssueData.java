@@ -48,7 +48,7 @@ public class BIssueData {
     @JsonProperty("reporter")
     public BIReporter reporter;
     @JsonProperty("assignee")
-    public Object assignee;
+    public BIUser assignee;
     @JsonProperty("created_on")
     public String createdOn;
     @JsonProperty("edited_on")

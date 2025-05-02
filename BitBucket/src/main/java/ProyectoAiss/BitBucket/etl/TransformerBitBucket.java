@@ -25,16 +25,16 @@ public class TransformerBitBucket {
         String raw = bitBucketCommit.author.raw;
         String email = raw != null && raw.contains("<") ? raw.substring(raw.indexOf("<") + 1, raw.indexOf(">")) : "";
         commit.setAuthorEmail(email);
-        commit.setWebUrl(bitBucketCommit.links.BCHtml.href);
+        commit.setWebUrl(bitBucketCommit.links.html.href);
         if (bitBucketCommit.repository != null) {
             commit.setRepositoryId(bitBucketCommit.repository.uuid);
             commit.setRepositoryName(bitBucketCommit.repository.name);
 
-            if (bitBucketCommit.repository.BCLinks != null &&
-                    bitBucketCommit.repository.BCLinks.BCHtml != null) {
-                commit.setRepositoryUrl(bitBucketCommit.repository.BCLinks.BCHtml.href);
+            if (bitBucketCommit.repository.links != null &&
+                    bitBucketCommit.repository.links.html != null) {
+                commit.setRepositoryUrl(bitBucketCommit.repository.links.html.href);
             } else {
-                commit.setRepositoryUrl(null);
+                commit.setRepositoryUrl("https://bitbucket.org/" + bitBucketCommit.repository.fullName);
             }
         }
 
@@ -51,12 +51,12 @@ public class TransformerBitBucket {
             user.setUsername(bitBucketIssueComment.user.nickname);
             user.setName(bitBucketIssueComment.user.displayName);
 
-            if (bitBucketIssueComment.user.BILinks != null) {
-                if (bitBucketIssueComment.user.BILinks.comments != null) {
-                    user.setAvatarUrl(bitBucketIssueComment.user.BILinks.avatar.href);
+            if (bitBucketIssueComment.user.links != null) {
+                if (bitBucketIssueComment.user.links.avatar != null) {
+                    user.setAvatarUrl(bitBucketIssueComment.user.links.avatar.href);
                 }
-                if (bitBucketIssueComment.user.BILinks.html != null) {
-                    user.setWebUrl(bitBucketIssueComment.user.BILinks.html.href);
+                if (bitBucketIssueComment.user.links.html != null) {
+                    user.setWebUrl(bitBucketIssueComment.user.links.html.href);
                 }
             }
         }
@@ -65,8 +65,8 @@ public class TransformerBitBucket {
         comment.setId(bitBucketIssueComment.id.toString());
         comment.setAuthor(user);
 
-        if (bitBucketIssueComment.BIContent != null && bitBucketIssueComment.BIContent.raw != null) {
-            comment.setBody(bitBucketIssueComment.BIContent.raw);
+        if (bitBucketIssueComment.content != null && bitBucketIssueComment.content.raw != null) {
+            comment.setBody(bitBucketIssueComment.content.raw);
         } else {
             comment.setBody("(no content)");
         }
@@ -85,17 +85,8 @@ public class TransformerBitBucket {
         BIssue issue = new BIssue();
 
         issue.setId(issueData.id != null ? issueData.id.toString() : null);
-
-        if (issueData.content != null && issueData.content.raw != null) {
-            String[] lines = issueData.content.raw.split("\n", 2);
-            issue.setTitle(lines[0]);
-            issue.setDescription(lines.length > 1 ? lines[1] : lines[0]);
-        } else {
-            issue.setTitle("(no content)");
-            issue.setDescription("");
-        }
-
-        // Estado
+        issue.setTitle(issueData.title);
+        issue.setDescription(issueData.content.raw);
         issue.setState(issueData.state);
         issue.setCreatedAt(issueData.createdOn);
         issue.setUpdatedAt(issueData.updatedOn);
@@ -107,11 +98,11 @@ public class TransformerBitBucket {
             author.setUsername(issueData.reporter.nickname);
             author.setName(issueData.reporter.displayName);
 
-            if (issueData.reporter.BILinks != null) {
-                if (issueData.reporter.BILinks.avatar != null)
-                    author.setAvatarUrl(issueData.reporter.BILinks.avatar.href);
-                if (issueData.reporter.BILinks.html != null)
-                    author.setWebUrl(issueData.reporter.BILinks.html.href);
+            if (issueData.reporter.links != null) {
+                if (issueData.reporter.links.avatar != null)
+                    author.setAvatarUrl(issueData.reporter.links.avatar.href);
+                if (issueData.reporter.links.html != null)
+                    author.setWebUrl(issueData.reporter.links.html.href);
             }
 
             issue.setAuthor(author);
@@ -119,7 +110,21 @@ public class TransformerBitBucket {
             issue.setAuthor(null);
         }
 
-        issue.setAssignee(null);
+        if (issueData.assignee != null) {
+            BUser assignee = new BUser();
+            assignee.setId(issueData.assignee.uuid);
+            assignee.setUsername(issueData.assignee.nickname);
+            assignee.setName(issueData.assignee.displayName);
+            if (issueData.assignee.links != null) {
+                assignee.setAvatarUrl(issueData.assignee.links.avatar.href);
+                assignee.setWebUrl(issueData.assignee.links.html.href);
+            }
+            issue.setAssignee(assignee);
+        }
+        else{
+            issue.setAssignee(null);
+        }
+        issue.setWebUrl(issueData.links.html.href);
         issue.setLabels(new ArrayList<>());
         issue.setComments(comments);
 

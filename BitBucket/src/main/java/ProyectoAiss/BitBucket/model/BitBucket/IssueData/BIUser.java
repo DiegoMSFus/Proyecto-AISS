@@ -23,8 +23,8 @@ public class BIUser {
 
     @JsonProperty("display_name")
     public String displayName;
-    @JsonProperty("BILinks")
-    public BILinks BILinks;
+    @JsonProperty("links")
+    public BILinks links;
     @JsonProperty("type")
     public String type;
     @JsonProperty("uuid")
@@ -44,9 +44,9 @@ public class BIUser {
         sb.append('=');
         sb.append(((this.displayName == null)?"<null>":this.displayName));
         sb.append(',');
-        sb.append("BILinks");
+        sb.append("links");
         sb.append('=');
-        sb.append(((this.BILinks == null)?"<null>":this.BILinks));
+        sb.append(((this.links == null)?"<null>":this.links));
         sb.append(',');
         sb.append("type");
         sb.append('=');

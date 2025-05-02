@@ -14,9 +14,6 @@ public class BIssue {
     @Id
     @JsonProperty("id")
     private String id;
-
-    @JsonProperty("ref_id")
-    private String refId;
     @JsonProperty("title")
     private String title;
     @JsonProperty("description")
@@ -61,14 +58,6 @@ public class BIssue {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getRefId() {
-        return refId;
-    }
-
-    public void setRefId(String refId) {
-        this.refId = refId;
     }
 
     public String getTitle() {
@@ -182,10 +171,6 @@ public class BIssue {
         sb.append("id");
         sb.append('=');
         sb.append(((this.id == null) ? "<null>" : this.id));
-        sb.append(',');
-        sb.append("refId");
-        sb.append('=');
-        sb.append(((this.refId == null) ? "<null>" : this.refId));
         sb.append(',');
         sb.append("title");
         sb.append('=');
