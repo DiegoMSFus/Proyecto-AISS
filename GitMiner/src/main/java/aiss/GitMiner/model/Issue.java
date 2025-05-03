@@ -61,7 +61,7 @@ public class Issue {
 
     public Issue() {}
 
-    public Issue(String title, String description, String state, String createdAt, String updatedAt, String closedAt, List<String> labels, User author, User assignee, List<Comment> comments) {
+    public Issue(String title, String description, String state, String createdAt, String updatedAt, String closedAt, List<String> labels, Integer votes, User author, User assignee, List<Comment> comments) {
         this.title = title;
         this.description = description;
         this.state = state;
@@ -69,6 +69,7 @@ public class Issue {
         this.updatedAt = updatedAt;
         this.closedAt = closedAt;
         this.labels = labels;
+        this.votes = votes;
         this.author = author;
         this.assignee = assignee;
         this.comments = comments;
