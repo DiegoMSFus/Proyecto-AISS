@@ -39,14 +39,10 @@ public class BIssue {
     @JoinColumn(name = "assignee_id",referencedColumnName = "id")
     @OneToOne(cascade=CascadeType.ALL)
     private BUser  assignee;
-    @JsonProperty("upvotes")
-    private Integer upvotes;
-    @JsonProperty("downvotes")
-    private Integer downvotes;
-
+    @JsonProperty("votes")
+    private Integer votes;
     @JsonProperty("web_url")
     private String webUrl;
-
     @JsonProperty("comments")
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "issueId")
@@ -132,20 +128,12 @@ public class BIssue {
         this.assignee = assignee;
     }
 
-    public Integer getUpvotes() {
-        return upvotes;
+    public Integer getVotes() {
+        return votes;
     }
 
-    public void setUpvotes(Integer upvotes) {
-        this.upvotes = upvotes;
-    }
-
-    public Integer getDownvotes() {
-        return downvotes;
-    }
-
-    public void setDownvotes(Integer downvotes) {
-        this.downvotes = downvotes;
+    public void setVotes(Integer votes) {
+        this.votes = votes;
     }
 
     public String getWebUrl() {
@@ -208,13 +196,9 @@ public class BIssue {
         sb.append('=');
         sb.append(((this.assignee == null) ? "<null>" : this.assignee));
         sb.append(',');
-        sb.append("upvotes");
+        sb.append("votes");
         sb.append('=');
-        sb.append(((this.upvotes == null) ? "<null>" : this.upvotes));
-        sb.append(',');
-        sb.append("downvotes");
-        sb.append('=');
-        sb.append(((this.downvotes == null) ? "<null>" : this.downvotes));
+        sb.append(((this.votes == null) ? "<null>" : this.votes));
         sb.append(',');
         sb.append("comments");
         sb.append('=');

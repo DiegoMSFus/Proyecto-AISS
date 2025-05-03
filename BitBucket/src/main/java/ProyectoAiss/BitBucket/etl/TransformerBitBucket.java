@@ -124,6 +124,7 @@ public class TransformerBitBucket {
         else{
             issue.setAssignee(null);
         }
+        issue.setVotes(issueData.votes);
         issue.setWebUrl(issueData.links.html.href);
         issue.setLabels(new ArrayList<>());
         issue.setComments(comments);

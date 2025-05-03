@@ -57,6 +57,8 @@ public class BIssueData {
     public String updatedOn;
     @JsonProperty("state")
     public String state;
+    @JsonProperty("votes")
+    public Integer votes;
 
 
     @Override
@@ -106,6 +108,10 @@ public class BIssueData {
         sb.append("updatedOn");
         sb.append('=');
         sb.append(((this.updatedOn == null)?"<null>":this.updatedOn));
+        sb.append(',');
+        sb.append("votes");
+        sb.append('=');
+        sb.append(((this.votes == null)?"<null>":this.votes));
         sb.append(',');
         sb.append("state");
         sb.append('=');
