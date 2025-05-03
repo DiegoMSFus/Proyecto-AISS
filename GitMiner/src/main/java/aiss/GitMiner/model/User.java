@@ -15,7 +15,6 @@ public class User {
     private String username;
 
     @Column(name = "name")
-    @NotEmpty(message = "User name is required")
     private String name;
 
     @Column(name = "avatarUrl")

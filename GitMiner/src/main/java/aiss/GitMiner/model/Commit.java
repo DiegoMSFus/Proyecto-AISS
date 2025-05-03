@@ -22,7 +22,6 @@ public class Commit {
     private String title;
 
     @Column(name = "message")
-    @NotNull(message = "Commit message cannot be null")
     private String message;
 
     @Column(name = "authorName")
@@ -34,7 +33,6 @@ public class Commit {
     private String authorEmail;
 
     @Column(name = "authoredDate")
-    @Past(message = "Authored date must be in the past")
     private String authoredDate;
 
     @Column(name = "webUrl")

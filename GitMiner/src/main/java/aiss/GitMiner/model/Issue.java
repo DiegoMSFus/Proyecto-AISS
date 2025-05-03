@@ -28,15 +28,12 @@ public class Issue {
     private String state;
 
     @Column(name = "createdAt")
-    @Past(message = "Creation date must be in the past")
     private String createdAt;
 
     @Column(name = "updatedAt")
-    @Past(message = "Update date must be in the past")
     private String updatedAt;
 
     @Column(name = "closedAt")
-    @Past(message = "Close date must be in the past")
     private String closedAt;
 
     @ElementCollection

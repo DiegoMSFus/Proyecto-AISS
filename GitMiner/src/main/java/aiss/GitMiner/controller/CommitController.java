@@ -18,7 +18,13 @@ public class CommitController {
     CommitRepository commitRepository;
 
     @GetMapping
-    public List<Commit> getAllCommits() {return commitRepository.findAll();}
+    public List<Commit> getAllCommits(@RequestParam(required = false) String authorEmail) {
+        if (authorEmail != null) {
+            return commitRepository.findByAuthorEmail(authorEmail);
+        } else {
+            return commitRepository.findAll();
+        }
+    }
 
     @GetMapping("/{id}")
     public Commit getCommitById(@PathVariable long id) {

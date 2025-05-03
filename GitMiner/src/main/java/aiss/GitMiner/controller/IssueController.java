@@ -1,11 +1,13 @@
 package aiss.GitMiner.controller;
 
+import aiss.GitMiner.model.Comment;
 import aiss.GitMiner.model.Issue;
 import aiss.GitMiner.repository.IssueRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,12 +20,30 @@ public class IssueController {
     IssueRepository issueRepository;
 
     @GetMapping
-    public List<Issue> getAllIssues() {return issueRepository.findAll();}
+    public List<Issue> getAllIssues(@RequestParam(required = false) Long authorId,
+                                    @RequestParam(required = false) String state) {
+        if (authorId != null) {
+            return issueRepository.findByAuthor_Id(authorId);
+        } else if (state != null) {
+            return issueRepository.findByState(state);
+        } else {
+            return issueRepository.findAll();
+        }
+    }
 
     @GetMapping("/{id}")
     public Issue getIssueById(@PathVariable long id) {
         Optional<Issue> issue = issueRepository.findById(id);
         return issue.get();
+    }
+    @GetMapping("/{id}/comments")
+    public List<Comment> getIssueComments(@PathVariable long id) {
+        Optional<Issue> issue = issueRepository.findById(id);
+        if (issue.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        return issue.get().getComments();
     }
 
     @ResponseStatus(HttpStatus.CREATED)

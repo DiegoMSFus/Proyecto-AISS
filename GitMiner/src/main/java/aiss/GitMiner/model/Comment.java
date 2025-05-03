@@ -17,11 +17,9 @@ public class Comment {
     private String body;
 
     @Column(name = "createdAt")
-    @Past(message = "Creation date must be in the past")
     private String createdAt;
 
     @Column(name = "updatedAt")
-    @Past(message = "Update date must be in the past")
     private String updatedAt;
 
     @OneToOne(cascade = CascadeType.ALL)
