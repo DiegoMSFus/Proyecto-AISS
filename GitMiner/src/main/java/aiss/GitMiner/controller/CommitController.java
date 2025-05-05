@@ -18,16 +18,16 @@ public class CommitController {
     CommitRepository commitRepository;
 
     @GetMapping
-    public List<Commit> getAllCommits(@RequestParam(required = false) String authorEmail) {
-        if (authorEmail != null) {
-            return commitRepository.findByAuthorEmail(authorEmail);
+    public List<Commit> getAllCommits(@RequestParam(required = false) String author_email) {
+        if (author_email != null) {
+            return commitRepository.findByAuthorEmail(author_email);
         } else {
             return commitRepository.findAll();
         }
     }
 
     @GetMapping("/{id}")
-    public Commit getCommitById(@PathVariable long id) {
+    public Commit getCommitById(@PathVariable String id) {
         Optional<Commit> commit = commitRepository.findById(id);
         return commit.get();
     }
@@ -36,16 +36,17 @@ public class CommitController {
     @PostMapping
     public Commit create(@Valid @RequestBody Commit commit) {
         Commit newCommit = commitRepository.save(
-                new Commit(commit.getTitle(), commit.getMessage(), commit.getAuthorName(), commit.getAuthorEmail(), commit.getAuthoredDate(), commit.getWebUrl()));
+                new Commit(commit.getId(), commit.getTitle(), commit.getMessage(), commit.getAuthorName(), commit.getAuthorEmail(), commit.getAuthoredDate(), commit.getWebUrl()));
         return newCommit;
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{id}")
-    public void update(@Valid @RequestBody Commit updatedCommit, @PathVariable long id) {
+    public void update(@Valid @RequestBody Commit updatedCommit, @PathVariable String id) {
         Optional<Commit> commit = commitRepository.findById(id);
 
         Commit _commit = commit.get();
+        _commit.setId(updatedCommit.getId());
         _commit.setTitle(updatedCommit.getTitle());
         _commit.setMessage(updatedCommit.getMessage());
         _commit.setAuthorName(updatedCommit.getAuthorName());
@@ -57,7 +58,7 @@ public class CommitController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable long id) {
+    public void delete(@PathVariable String id) {
         if (commitRepository.existsById(id)) {
             commitRepository.deleteById(id);
         }

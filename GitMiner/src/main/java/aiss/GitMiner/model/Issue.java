@@ -1,5 +1,6 @@
 package aiss.GitMiner.model;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -10,61 +11,61 @@ import java.util.List;
 
 @Entity
 @Table(name = "issues")
+@JsonPropertyOrder({ "id", "title", "description", "state", "created_at", "updated_at", "closed_at", "labels", "author", "assignee", "votes", "comments" })
 public class Issue {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private String id;
 
     @Column(name = "title")
-    @NotEmpty(message = "Issue title is required")
     private String title;
 
+    @Lob
     @Column(name = "description")
-    @NotNull(message = "Issue description cannot be null")
     private String description;
 
     @Column(name = "state")
     @NotNull(message = "Issue state cannot be null")
     private String state;
 
-    @Column(name = "createdAt")
-    private String createdAt;
+    @Column(name = "created_at")
+    private String created_at;
 
-    @Column(name = "updatedAt")
-    private String updatedAt;
+    @Column(name = "updated_at")
+    private String updated_at;
 
-    @Column(name = "closedAt")
-    private String closedAt;
+    @Column(name = "closed_at")
+    private String closed_at;
 
     @ElementCollection
-    @CollectionTable(name = "issueLabels", joinColumns = @JoinColumn(name = "issueId"))
+    @CollectionTable(name = "issueLabels", joinColumns = @JoinColumn(name = "issue_id"))
     @Column(name = "labels")
     private List<String> labels;
 
     @Column(name = "votes")
     private Integer votes;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "authorId")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "author_id")
     private User author;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "assigneeId")
+    @JoinColumn(name = "assignee_id")
     private User assignee;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "issueId")
+    @JoinColumn(name = "issue_id")
     private List<Comment> comments;
 
     public Issue() {}
 
-    public Issue(String title, String description, String state, String createdAt, String updatedAt, String closedAt, List<String> labels, Integer votes, User author, User assignee, List<Comment> comments) {
+    public Issue(String id, String title, String description, String state, String created_at, String updated_at, String closed_at, List<String> labels, Integer votes, User author, User assignee, List<Comment> comments) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.state = state;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.closedAt = closedAt;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
+        this.closed_at = closed_at;
         this.labels = labels;
         this.votes = votes;
         this.author = author;
@@ -72,11 +73,11 @@ public class Issue {
         this.comments = comments;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -105,27 +106,27 @@ public class Issue {
     }
 
     public String getCreatedAt() {
-        return createdAt;
+        return created_at;
     }
 
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
+    public void setCreatedAt(String created_at) {
+        this.created_at = created_at;
     }
 
     public String getUpdatedAt() {
-        return updatedAt;
+        return updated_at;
     }
 
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setUpdatedAt(String updated_at) {
+        this.updated_at = updated_at;
     }
 
     public String getClosedAt() {
-        return closedAt;
+        return closed_at;
     }
 
-    public void setClosedAt(String closedAt) {
-        this.closedAt = closedAt;
+    public void setClosedAt(String closed_at) {
+        this.closed_at = closed_at;
     }
 
     public List<String> getLabels() {

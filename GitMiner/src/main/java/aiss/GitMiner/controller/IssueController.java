@@ -20,7 +20,7 @@ public class IssueController {
     IssueRepository issueRepository;
 
     @GetMapping
-    public List<Issue> getAllIssues(@RequestParam(required = false) Long authorId,
+    public List<Issue> getAllIssues(@RequestParam(required = false) String authorId,
                                     @RequestParam(required = false) String state) {
         if (authorId != null) {
             return issueRepository.findByAuthor_Id(authorId);
@@ -32,12 +32,12 @@ public class IssueController {
     }
 
     @GetMapping("/{id}")
-    public Issue getIssueById(@PathVariable long id) {
+    public Issue getIssueById(@PathVariable String id) {
         Optional<Issue> issue = issueRepository.findById(id);
         return issue.get();
     }
     @GetMapping("/{id}/comments")
-    public List<Comment> getIssueComments(@PathVariable long id) {
+    public List<Comment> getIssueComments(@PathVariable String id) {
         Optional<Issue> issue = issueRepository.findById(id);
         if (issue.isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -49,16 +49,17 @@ public class IssueController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Issue create(@Valid @RequestBody Issue issue) {
-        Issue newIssue = issueRepository.save(new Issue(issue.getTitle(), issue.getDescription(), issue.getState(), issue.getCreatedAt(), issue.getUpdatedAt(), issue.getClosedAt(), issue.getLabels(), issue.getVotes(), issue.getAuthor(), issue.getAssignee(), issue.getComments()));
+        Issue newIssue = issueRepository.save(new Issue(issue.getId(), issue.getTitle(), issue.getDescription(), issue.getState(), issue.getCreatedAt(), issue.getUpdatedAt(), issue.getClosedAt(), issue.getLabels(), issue.getVotes(), issue.getAuthor(), issue.getAssignee(), issue.getComments()));
         return newIssue;
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{id}")
-    public Issue update(@Valid @RequestBody Issue issue, @PathVariable long id) {
+    public Issue update(@Valid @RequestBody Issue issue, @PathVariable String id) {
         Optional<Issue> issueOptional = issueRepository.findById(id);
 
         Issue _issue = issueOptional.get();
+        _issue.setId(id);
         _issue.setTitle(issue.getTitle());
         _issue.setDescription(issue.getDescription());
         _issue.setState(issue.getState());
@@ -75,7 +76,7 @@ public class IssueController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable long id) {
+    public void delete(@PathVariable String id) {
         if (issueRepository.existsById(id)) {
             issueRepository.deleteById(id);
         }

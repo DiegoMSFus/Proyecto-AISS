@@ -7,6 +7,5 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CommitRepository extends JpaRepository<Commit, Long> {
-    List<Commit> findByAuthorEmail(String authorEmail);
-}
+public interface CommitRepository extends JpaRepository<Commit, String> {
+    List<Commit> findByAuthorEmail(String author_email);   }

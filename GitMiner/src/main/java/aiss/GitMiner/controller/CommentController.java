@@ -21,7 +21,7 @@ public class CommentController {
     public List<Comment> getAllComments() {return commentRepository.findAll();}
 
     @GetMapping("/{id}")
-    public Comment getCommentById(@PathVariable long id) {
+    public Comment getCommentById(@PathVariable String id) {
         Optional<Comment> comment = commentRepository.findById(id);
         return comment.get();
     }
@@ -30,16 +30,17 @@ public class CommentController {
     @PostMapping
     public Comment create(@Valid @RequestBody Comment comment) {
         Comment newComment = commentRepository.save(
-                new Comment(comment.getBody(), comment.getCreatedAt(), comment.getUpdatedAt(), comment.getAuthor()));
+                new Comment(comment.getId(), comment.getBody(), comment.getCreatedAt(), comment.getUpdatedAt(), comment.getAuthor()));
         return newComment;
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{id}")
-    public void update(@Valid @RequestBody Comment updatedComment, @PathVariable long id) {
+    public void update(@Valid @RequestBody Comment updatedComment, @PathVariable String id) {
         Optional<Comment> comment = commentRepository.findById(id);
 
         Comment _comment = comment.get();
+        _comment.setId(updatedComment.getId());
         _comment.setBody(updatedComment.getBody());
         _comment.setCreatedAt(updatedComment.getCreatedAt());
         _comment.setUpdatedAt(updatedComment.getUpdatedAt());
@@ -49,7 +50,7 @@ public class CommentController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable long id) {
+    public void delete(@PathVariable String id) {
         if (commentRepository.existsById(id)) {
             commentRepository.deleteById(id);
         }

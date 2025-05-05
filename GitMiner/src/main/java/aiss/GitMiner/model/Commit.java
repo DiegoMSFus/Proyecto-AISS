@@ -1,5 +1,6 @@
 package aiss.GitMiner.model;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -11,49 +12,48 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "commits")
+@JsonPropertyOrder({ "id", "title", "message", "author_name", "author_email", "authored_date", "web_url" })
 public class Commit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private String id;
 
     @Column(name = "title")
-    @NotEmpty(message = "Commit title is required")
     private String title;
 
+    @Lob
     @Column(name = "message")
     private String message;
 
-    @Column(name = "authorName")
-    @NotNull(message = "Author name cannot be null")
-    private String authorName;
+    @Column(name = "author_name")
+    private String author_name;
 
-    @Column(name = "authorEmail")
-    @Email(message = "Author email must be an acceptable email")
+    @Column(name = "author_email")
     private String authorEmail;
 
-    @Column(name = "authoredDate")
-    private String authoredDate;
+    @Column(name = "authored_date")
+    private String authored_date;
 
-    @Column(name = "webUrl")
-    private String webUrl;
+    @Column(name = "web_url")
+    private String web_url;
 
     public Commit() {}
 
-    public Commit(String title, String message, String authorName, String authorEmail, String authoredDate, String webUrl) {
+    public Commit(String id, String title, String message, String author_name, String author_email, String authored_date, String web_url) {
+        this.id = id;
         this.title = title;
         this.message = message;
-        this.authorName = authorName;
-        this.authorEmail = authorEmail;
-        this.authoredDate = authoredDate;
-        this.webUrl = webUrl;
+        this.author_name = author_name;
+        this.authorEmail = author_email;
+        this.authored_date = authored_date;
+        this.web_url = web_url;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -74,34 +74,34 @@ public class Commit {
     }
 
     public String getAuthorName() {
-        return authorName;
+        return author_name;
     }
 
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
+    public void setAuthorName(String author_name) {
+        this.author_name = author_name;
     }
 
     public String getAuthorEmail() {
         return authorEmail;
     }
 
-    public void setAuthorEmail(String authorEmail) {
-        this.authorEmail = authorEmail;
+    public void setAuthorEmail(String author_email) {
+        this.authorEmail = author_email;
     }
 
     public String getAuthoredDate() {
-        return authoredDate;
+        return authored_date;
     }
 
-    public void setAuthoredDate(String authoredDate) {
-        this.authoredDate = authoredDate;
+    public void setAuthoredDate(String authored_date) {
+        this.authored_date = authored_date;
     }
 
     public String getWebUrl() {
-        return webUrl;
+        return web_url;
     }
 
-    public void setWebUrl(String webUrl) {
-        this.webUrl = webUrl;
+    public void setWebUrl(String web_url) {
+        this.web_url = web_url;
     }
 }

@@ -1,14 +1,15 @@
 package aiss.GitMiner.model;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "users")
+@JsonPropertyOrder({ "id", "username", "name", "web_url", "avatar_url" })
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private String id;
 
     @Column(name = "username")
     @NotEmpty(message = "User username is required")
@@ -17,26 +18,27 @@ public class User {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "avatarUrl")
-    private String avatarUrl;
+    @Column(name = "avatar_url")
+    private String avatar_url;
 
-    @Column(name = "webUrl")
-    private String webUrl;
+    @Column(name = "web_url")
+    private String web_url;
 
     public User() {}
 
-    public User(String username, String name, String avatarUrl, String webUrl) {
+    public User(String id, String username, String name, String avatar_url, String web_url) {
+        this.id = id;
         this.username = username;
         this.name = name;
-        this.avatarUrl = avatarUrl;
-        this.webUrl = webUrl;
+        this.avatar_url = avatar_url;
+        this.web_url = web_url;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -57,19 +59,19 @@ public class User {
     }
 
     public String getAvatarUrl() {
-        return avatarUrl;
+        return avatar_url;
     }
 
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
+    public void setAvatarUrl(String avatar_url) {
+        this.avatar_url = avatar_url;
     }
 
     public String getWebUrl() {
-        return webUrl;
+        return web_url;
     }
 
-    public void setWebUrl(String webUrl) {
-        this.webUrl = webUrl;
+    public void setWebUrl(String web_url) {
+        this.web_url = web_url;
     }
 
 }

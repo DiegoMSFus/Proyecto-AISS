@@ -1,5 +1,6 @@
 package aiss.GitMiner.model;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Past;
 
@@ -7,39 +8,41 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "comments")
+@JsonPropertyOrder({ "id", "body", "author", "created_at", "updated_at" })
 public class Comment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private String id;
 
+    @Lob
     @Column(name = "body")
     private String body;
 
-    @Column(name = "createdAt")
-    private String createdAt;
+    @Column(name = "created_at")
+    private String created_at;
 
-    @Column(name = "updatedAt")
-    private String updatedAt;
+    @Column(name = "updated_at")
+    private String updated_at;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "authorId")
     private User author;
 
     public Comment() {}
 
-    public Comment(String body, String createdAt, String updatedAt, User author) {
+    public Comment(String id, String body, String created_at, String updated_at, User author) {
+        this.id = id;
         this.body = body;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
         this.author = author;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -52,19 +55,19 @@ public class Comment {
     }
 
     public String getCreatedAt() {
-        return createdAt;
+        return created_at;
     }
 
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
+    public void setCreatedAt(String created_at) {
+        this.created_at = created_at;
     }
 
     public String getUpdatedAt() {
-        return updatedAt;
+        return updated_at;
     }
 
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setUpdatedAt(String updated_at) {
+        this.updated_at = updated_at;
     }
 
     public User getAuthor() {

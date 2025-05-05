@@ -21,7 +21,7 @@ public class UserController {
     public List<User> getAllUsers() {return userRepository.findAll();}
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable long id) {
+    public User getUserById(@PathVariable String id) {
         Optional<User> user = userRepository.findById(id);
         return user.get();
     }
@@ -29,15 +29,16 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public User create(@Valid @RequestBody User user) {
-        User newUser = userRepository.save(new User(user.getUsername(),user.getName(), user.getAvatarUrl(), user.getWebUrl()));
+        User newUser = userRepository.save(new User(user.getId(), user.getUsername(),user.getName(), user.getAvatarUrl(), user.getWebUrl()));
         return newUser;
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{id}")
-    public void update(@Valid @RequestBody User user, @PathVariable long id) {
+    public void update(@Valid @RequestBody User user, @PathVariable String id) {
         Optional<User> userOptional = userRepository.findById(id);
         User _user = userOptional.get();
+        _user.setId(user.getId());
         _user.setUsername(user.getUsername());
         _user.setName(user.getName());
         _user.setAvatarUrl(user.getAvatarUrl());
@@ -47,7 +48,7 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable long id) {
+    public void delete(@PathVariable String id) {
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
         }

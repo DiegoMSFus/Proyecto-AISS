@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface IssueRepository extends JpaRepository<Issue, Long> {
-    List<Issue> findByAuthor_Id(Long authorId);
+public interface IssueRepository extends JpaRepository<Issue, String> {
+    List<Issue> findByAuthor_Id(String authorId);
 
     List<Issue> findByState(String state);
 }

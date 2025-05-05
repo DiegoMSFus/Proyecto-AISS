@@ -1,5 +1,7 @@
 package aiss.GitMiner.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 
@@ -7,41 +9,42 @@ import java.util.List;
 
 @Entity
 @Table(name = "projects")
+@JsonPropertyOrder({ "id", "name", "web_url", "commits", "issues" })
 public class Project {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private String id;
 
     @Column(name = "name")
     @NotEmpty(message = "Project name is required")
     private String name;
 
-    @Column(name = "webUrl")
-    private String webUrl;
+    @Column(name = "web_url")
+    private String web_url;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "projectId")
+    @JoinColumn(name = "project_id")
     private List<Commit> commits;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "projectId")
+    @JoinColumn(name = "project_id")
     private List<Issue> issues;
 
     public Project() {}
 
-    public Project(String name, String webUrl, List<Commit> commits, List<Issue> issues) {
+    public Project(String id, String name, String web_url, List<Commit> commits, List<Issue> issues) {
+        this.id = id;
         this.name = name;
-        this.webUrl = webUrl;
+        this.web_url = web_url;
         this.commits = commits;
         this.issues = issues;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -54,11 +57,11 @@ public class Project {
     }
 
     public String getWebUrl() {
-        return webUrl;
+        return web_url;
     }
 
-    public void setWebUrl(String webUrl) {
-        this.webUrl = webUrl;
+    public void setWebUrl(String web_url) {
+        this.web_url = web_url;
     }
 
     public List<Commit> getCommits() {
