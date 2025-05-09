@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public class Commit {
 
     @JsonProperty("author")
-    public String author;
+    public Author author;
     @JsonProperty("message")
     public String message;
     @JsonProperty("url")
