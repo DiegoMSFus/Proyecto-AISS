@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public class Comment {
 
     @JsonProperty("id")
-    public Integer id;
+    public String id;
     @JsonProperty("user")
     public User user;
     @JsonProperty("created_at")

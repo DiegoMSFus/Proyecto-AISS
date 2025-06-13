@@ -17,7 +17,7 @@ public class User {
     @JsonProperty("login")
     public String login;
     @JsonProperty("id")
-    public Integer id;
+    public String id;
     @JsonProperty("avatar_url")
     public String avatarUrl;
     @JsonProperty("url")

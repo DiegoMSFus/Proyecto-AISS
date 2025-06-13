@@ -31,11 +31,11 @@ public class IssueData {
     @JsonProperty("repository_url")
     public String repositoryUrl;
     @JsonProperty("comments")
-    public List<Comment> comments;
+    public Integer comments;
     @JsonProperty("html_url")
     public String htmlUrl;
     @JsonProperty("id")
-    public Long id;
+    public String id;
     @JsonProperty("title")
     public String title;
     @JsonProperty("user")
@@ -56,6 +56,8 @@ public class IssueData {
     public Reactions reactions;
     @JsonProperty("body")
     public String body;
+    @JsonProperty("number")
+    public Integer number;
 
     @Override
     public String toString() {

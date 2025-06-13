@@ -9,7 +9,6 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +31,7 @@ public class IssueService {
     @Value("${github.baseuri}")
     private String baseUri;
 
-    public List<Issue> getIssues(String owner, String repo, Integer pages) {
+    public List<Issue> sinceIssues(String owner, String repo, Integer pages, Integer nIssues) {
         String uri = baseUri + owner + "/" + repo + "/issues?state=all&page=1";
 
         HttpHeaders headers = new HttpHeaders();
@@ -42,56 +41,22 @@ public class IssueService {
         List<Issue> allIssues = new ArrayList<>();
         int currentPage = 1;
 
-        while (uri != null && currentPage <= pages) {
+        while (uri != null && currentPage <= pages && allIssues.size() < nIssues) {
             System.out.println("Fetching: " + uri);
             ResponseEntity<IssueData[]> response = restTemplate.exchange(
                     uri, HttpMethod.GET, request, IssueData[].class);
 
             if (response.getBody() != null) {
-                Arrays.stream(response.getBody())
-                    .forEach(issueData -> {
-                        // Fetch comments for each issue
-                        List<aiss.github.model.Comment> comments = commentService.getNotes(
-                            owner, repo, issueData.id.toString());
-                        // Transform the issue with its comments
-                        Issue transformedIssue = transformer.transformIssue(issueData, comments);
-                        allIssues.add(transformedIssue);
-                    });
-            }
+                for (IssueData issueData : response.getBody()) {
+                    if (allIssues.size() >= nIssues)
+                        break;
 
-            uri = getNextPageUrl(response.getHeaders());
-            currentPage++;
-        }
+                    List<aiss.github.model.Comment> comments = commentService.getNotes(
+                            owner, repo, issueData.number.toString());
 
-        return allIssues;
-    }
-
-    public List<Issue> sinceIssues(String owner, String repo, Integer days, Integer pages) {
-        LocalDate sinceDate = LocalDate.now().minusDays(days);
-        String uri = baseUri + owner + "/" + repo + "/issues?state=all&since=" + sinceDate + "&page=1";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token);
-        HttpEntity<Void> request = new HttpEntity<>(headers);
-
-        List<Issue> allIssues = new ArrayList<>();
-        int currentPage = 1;
-
-        while (uri != null && currentPage <= pages) {
-            System.out.println("Fetching: " + uri);
-            ResponseEntity<IssueData[]> response = restTemplate.exchange(
-                    uri, HttpMethod.GET, request, IssueData[].class);
-
-            if (response.getBody() != null) {
-                Arrays.stream(response.getBody())
-                    .forEach(issueData -> {
-                        // Fetch comments for each issue
-                        List<aiss.github.model.Comment> comments = commentService.getNotes(
-                            owner, repo, issueData.id.toString());
-                        // Transform the issue with its comments
-                        Issue transformedIssue = transformer.transformIssue(issueData, comments);
-                        allIssues.add(transformedIssue);
-                    });
+                    Issue transformedIssue = transformer.transformIssue(issueData, comments);
+                    allIssues.add(transformedIssue);
+                }
             }
 
             uri = getNextPageUrl(response.getHeaders());
@@ -105,13 +70,12 @@ public class IssueService {
         List<String> linkHeaders = headers.get("Link");
         if (linkHeaders == null || linkHeaders.isEmpty()) return null;
 
-        // Parse Link header: <https://api.github.com/...&page=2>; rel="next", ...
         for (String linkHeader : linkHeaders) {
             String[] parts = linkHeader.split(", ");
             for (String part : parts) {
                 String[] section = part.split("; ");
                 if (section.length == 2 && section[1].equals("rel=\"next\"")) {
-                    return section[0].substring(1, section[0].length() - 1); // Remove < >
+                    return section[0].substring(1, section[0].length() - 1); // Quita < >
                 }
             }
         }

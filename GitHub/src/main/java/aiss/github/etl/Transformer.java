@@ -1,3 +1,4 @@
+
 package aiss.github.etl;
 
 import aiss.github.model.commitdata.*;
@@ -23,12 +24,10 @@ public class Transformer {
         commit.setWebUrl(githubCommit.htmlUrl != null ? githubCommit.htmlUrl : "");
 
         if (githubCommit.commit != null) {
-            // Procesar mensaje
             String message = githubCommit.commit.message != null ? githubCommit.commit.message : "";
             commit.setTitle(message.length() < 20 ? message : message.substring(0, 20));
             commit.setMessage(message);
 
-            // Procesar autor
             if (githubCommit.commit.author != null) {
                 commit.setAuthorName(githubCommit.commit.author.name != null ?
                         githubCommit.commit.author.name : "");
@@ -59,28 +58,22 @@ public class Transformer {
 
         Comment comment = new Comment();
 
-        // 1. Transformar el ID
         comment.setId(githubComment.id != null ? githubComment.id.toString() : "");
 
-        // 2. Transformar el cuerpo del comentario (campo obligatorio)
         comment.setBody(githubComment.body != null ? githubComment.body.trim() : "(no content)");
 
-        // 3. Transformar el autor (User)
         if (githubComment.user != null) {
             User author = new User();
-            // Mapear campos del usuario
             author.setId(githubComment.user.id != null ? githubComment.user.id.toString() : "");
             author.setUsername(githubComment.user.login != null ? githubComment.user.login : "");
-            author.setName(""); // GitHub no proporciona name en este User, solo login
+            author.setName("");
 
-            // URLs del usuario
-            author.setAvatarUrl(githubComment.user.avatarUrl); // Puede ser null
-            author.setWebUrl(githubComment.user.url); // Usamos url en lugar de htmlUrl
+            author.setAvatarUrl(githubComment.user.avatarUrl);
+            author.setWebUrl(githubComment.user.url);
 
             comment.setAuthor(author);
         }
 
-        // 4. Transformar fechas
         comment.setCreatedAt(githubComment.createdAt != null ? githubComment.createdAt : "");
         comment.setUpdatedAt(githubComment.updatedAt != null ? githubComment.updatedAt : "");
 
@@ -90,18 +83,15 @@ public class Transformer {
     public Issue transformIssue(IssueData githubIssue, List<Comment> comments) {
         Issue issue = new Issue();
 
-        // 1. Mapear campos básicos
         issue.setId(githubIssue.id != null ? githubIssue.id.toString() : null);
         issue.setTitle(githubIssue.title != null ? githubIssue.title : "");
         issue.setDescription(githubIssue.body != null ? githubIssue.body : "");
         issue.setState(githubIssue.state != null ? githubIssue.state : "open");
 
-        // 2. Mapear fechas
         issue.setCreatedAt(githubIssue.createdAt != null ? githubIssue.createdAt : "");
         issue.setUpdatedAt(githubIssue.updatedAt != null ? githubIssue.updatedAt : "");
         issue.setClosedAt(githubIssue.closedAt instanceof String ? (String) githubIssue.closedAt : null);
 
-        // 3. Mapear autor
         if (githubIssue.user != null) {
             User author = new User();
             author.setId(githubIssue.user.id != null ? githubIssue.user.id.toString() : null);
@@ -112,7 +102,6 @@ public class Transformer {
             issue.setAuthor(author);
         }
 
-        // 4. Mapear asignado
         if (githubIssue.assignee != null) {
             User assignee = new User();
             assignee.setId(githubIssue.assignee.id != null ? githubIssue.assignee.id.toString() : null);
@@ -123,11 +112,9 @@ public class Transformer {
             issue.setAssignee(assignee);
         }
 
-        // 5. Mapear votos (reacciones)
         issue.setVotes(githubIssue.reactions != null && githubIssue.reactions.totalCount != null ?
                 githubIssue.reactions.totalCount : 0);
 
-        // 6. Mapear labels (convertimos List<Label> a List<String>)
         if (githubIssue.labels != null) {
             List<String> labelStrings = githubIssue.labels.stream()
                     .map(label -> label.url != null ? label.url : "")
@@ -137,7 +124,6 @@ public class Transformer {
             issue.setLabels(new ArrayList<>());
         }
 
-        // 7. Mapear comentarios
         issue.setComments(comments != null ? comments : new ArrayList<>());
 
         return issue;
