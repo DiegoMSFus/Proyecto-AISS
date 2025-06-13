@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @JsonPropertyOrder({ "id", "title", "message", "author_name", "author_email", "authored_date", "web_url" })
 public class Commit {
 
-    @Id
+    @Id                          //id no es generado porque nos lo dan el post
     private String id;
 
     @Column(name = "title")
@@ -37,7 +37,7 @@ public class Commit {
     @Column(name = "web_url")
     private String web_url;
 
-    public Commit() {}
+    public Commit() {}  //constructor vacio
 
     public Commit(String id, String title, String message, String author_name, String author_email, String authored_date, String web_url) {
         this.id = id;
@@ -47,7 +47,7 @@ public class Commit {
         this.authorEmail = author_email;
         this.authored_date = authored_date;
         this.web_url = web_url;
-    }
+    }    //constructor con parametros
 
     public String getId() {
         return id;

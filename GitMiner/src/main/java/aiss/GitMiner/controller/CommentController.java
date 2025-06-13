@@ -28,14 +28,14 @@ public class CommentController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Comment create(@Valid @RequestBody Comment comment) {
+    public Comment create(@Valid @RequestBody Comment comment) {       //cogemos las propiedades del body y lo metemos en el constructor
         Comment newComment = commentRepository.save(
                 new Comment(comment.getId(), comment.getBody(), comment.getCreatedAt(), comment.getUpdatedAt(), comment.getAuthor()));
         return newComment;
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PutMapping("/{id}")
+    @PutMapping("/{id}")         //buscamos el comment antiguo y cambiamos sus valores por los del body
     public void update(@Valid @RequestBody Comment updatedComment, @PathVariable String id) {
         Optional<Comment> comment = commentRepository.findById(id);
 

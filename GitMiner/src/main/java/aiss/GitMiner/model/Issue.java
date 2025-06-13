@@ -13,7 +13,7 @@ import java.util.List;
 @Table(name = "issues")
 @JsonPropertyOrder({ "id", "title", "description", "state", "created_at", "updated_at", "closed_at", "labels", "author", "assignee", "votes", "comments" })
 public class Issue {
-    @Id
+    @Id                      //id no se autogenera porque lo metemos en los post
     private String id;
 
     @Column(name = "title")
@@ -48,7 +48,7 @@ public class Issue {
     @JoinColumn(name = "author_id")
     private User author;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "assignee_id")
     private User assignee;
 
@@ -56,7 +56,7 @@ public class Issue {
     @JoinColumn(name = "issue_id")
     private List<Comment> comments;
 
-    public Issue() {}
+    public Issue() {}  //constructo vacio
 
     public Issue(String id, String title, String description, String state, String created_at, String updated_at, String closed_at, List<String> labels, Integer votes, User author, User assignee, List<Comment> comments) {
         this.id = id;
@@ -71,11 +71,11 @@ public class Issue {
         this.author = author;
         this.assignee = assignee;
         this.comments = comments;
-    }
+    }   //contructor por parametros
 
     public String getId() {
         return id;
-    }
+    }    //geters y seters autogenerados
 
     public void setId(String id) {
         this.id = id;

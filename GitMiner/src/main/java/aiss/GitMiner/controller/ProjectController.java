@@ -55,15 +55,7 @@ public class ProjectController {
         }
 
 
-        Project newProject = projectRepository.save(
-                new Project(
-                        project.getId(),
-                        project.getName(),
-                        project.getWebUrl(),
-                        project.getCommits(),
-                        project.getIssues()
-                )
-        );
+        Project newProject = projectRepository.save(new Project(project.getId(), project.getName(), project.getWebUrl(), project.getCommits(), project.getIssues()));
 
         return newProject;
     }
