@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Component                          // a partir de los datos que llegan de bitbucket creamos los objetos que vamos a devolver
 public class TransformerBitBucket {
     public BCommit transformCommit(BCCommitData bitBucketCommit) {
         BCommit commit = new BCommit();

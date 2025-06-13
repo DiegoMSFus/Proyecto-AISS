@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CommitsPage {
+public class CommitsPage {                            //necesario para la paginacion
 
     @JsonProperty("values")
     public List<BCCommitData> values;
